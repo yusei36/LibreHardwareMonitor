@@ -232,8 +232,9 @@ namespace LibreHardwareMonitor.UI
                 case SensorType.Load:
                 case SensorType.Control:
                 case SensorType.Level:
-                    _notifyIcon.Icon = CreatePercentageIcon();
-                    break;
+                //TODO: add option to toggle this
+                //    _notifyIcon.Icon = CreatePercentageIcon();
+                //    break;
                 default:
                     _notifyIcon.Icon = CreateTransparentIcon();
                     break;
