@@ -29,6 +29,7 @@ namespace LibreHardwareMonitor.UI
         private readonly Pen _pen;
         private readonly Font _font;
         private readonly Font _smallFont;
+        private TrayIconType _trayIconType;
 
         public SensorNotifyIcon(SystemTray sensorSystemTray, ISensor sensor, PersistentSettings settings, UnitManager unitManager)
         {
@@ -41,6 +42,9 @@ namespace LibreHardwareMonitor.UI
                 defaultColor = Color.FromArgb(0xff, 0x70, 0x8c, 0xf1);
 
             Color = settings.GetValue(new Identifier(sensor.Identifier, "traycolor").ToString(), defaultColor);
+
+            var defaultIconType = GetDefaultIconType(sensor);
+            _trayIconType = settings.GetValue(new Identifier(sensor.Identifier, "trayicontype").ToString(), defaultIconType);
 
             _pen = new Pen(Color.FromArgb(96, Color.Black));
             ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
@@ -154,6 +158,19 @@ namespace LibreHardwareMonitor.UI
             _smallFont.Dispose();
         }
 
+        private TrayIconType GetDefaultIconType(ISensor sensor)
+        {
+            switch (Sensor.SensorType)
+            {
+                case SensorType.Load:
+                case SensorType.Control:
+                case SensorType.Level:
+                    return TrayIconType.Percent;
+                default:
+                    return TrayIconType.Transparent;
+            }
+        }
+
         private string GetString()
         {
             if (!Sensor.Value.HasValue)
@@ -227,16 +244,13 @@ namespace LibreHardwareMonitor.UI
         {
             Icon icon = _notifyIcon.Icon;
 
-            switch (Sensor.SensorType)
+            switch (_trayIconType)
             {
-                case SensorType.Load:
-                case SensorType.Control:
-                case SensorType.Level:
-                //TODO: add option to toggle this
-                //    _notifyIcon.Icon = CreatePercentageIcon();
-                //    break;
-                default:
+                case TrayIconType.Transparent:
                     _notifyIcon.Icon = CreateTransparentIcon();
+                    break;
+                case TrayIconType.Percent:
+                    _notifyIcon.Icon = CreatePercentageIcon();
                     break;
             }
 
