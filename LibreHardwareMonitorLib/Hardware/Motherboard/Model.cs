@@ -62,7 +62,9 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
         P8Z77_V,
         P9X79,
         PRIME_X370_PRO,
+        PRIME_X470_PRO,
         PRIME_X570_PRO,
+        PROART_X570_CREATOR_WIFI,
         PRO_WS_X570_ACE,
         RAMPAGE_EXTREME,
         RAMPAGE_II_GENE,
@@ -144,10 +146,12 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
         Z68X_UD7_B3,
         Z68XP_UD3R,
         Z690_AORUS_PRO,
+        Z690_GAMING_X_DDR4,
         Z170N_WIFI,
         X470_AORUS_GAMING_7_WIFI,
         X570_AORUS_MASTER,
         X570_GAMING_X,
+        X570_AORUS_ULTRA,
 
         // Shuttle
         FH67,

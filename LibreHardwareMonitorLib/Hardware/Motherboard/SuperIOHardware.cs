@@ -1397,6 +1397,7 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
                             break;
                         }
                         case Model.X570_AORUS_MASTER: // IT8688E
+                        case Model.X570_AORUS_ULTRA:
                         {
                             v.Add(new Voltage("Vcore", 0));
                             v.Add(new Voltage("+3.3V", 1, 29.4f, 45.3f));
@@ -1535,6 +1536,28 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
                             c.Add(new Ctrl("System Fan #2", 2));
                             c.Add(new Ctrl("System Fan #3", 3));
                             c.Add(new Ctrl("CPU Optional Fan", 4));
+                            break;
+                        }
+                        case Model.Z690_GAMING_X_DDR4:
+                        {
+                            t.Add(new Temperature("System #1", 0));
+                            t.Add(new Temperature("PCH", 1));
+                            t.Add(new Temperature("CPU", 2));
+                            t.Add(new Temperature("PCIe x16", 3));
+                            t.Add(new Temperature("VRM MOS", 4));
+                            t.Add(new Temperature("System #2", 5));
+                            f.Add(new Fan("CPU Fan", 0));
+                            f.Add(new Fan("System Fan #1", 1));
+                            f.Add(new Fan("System Fan #2", 2));
+                            f.Add(new Fan("System Fan #3", 3));
+                            f.Add(new Fan("CPU Optional Fan", 4));
+                            f.Add(new Fan("System Fan #4 / Pump", 5));
+                            c.Add(new Ctrl("CPU Fan", 0));
+                            c.Add(new Ctrl("System Fan #1", 1));
+                            c.Add(new Ctrl("System Fan #2", 2));
+                            c.Add(new Ctrl("System Fan #3", 3));
+                            c.Add(new Ctrl("CPU Optional Fan", 4));
+                            c.Add(new Ctrl("System Fan #4 / Pump", 5));
                             break;
                         }
                         case Model.Z68A_D3H_B3: // IT8728F
@@ -1790,6 +1813,7 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
                     switch (model)
                     {
                         case Model.X570_AORUS_MASTER: // IT879XE
+                        case Model.X570_AORUS_ULTRA:
                         {
                             v.Add(new Voltage("CPU VDD18", 0));
                             v.Add(new Voltage("DDRVTT AB", 1));
@@ -2548,11 +2572,16 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
                             t.Add(new Temperature("Temperature #4", 5));
                             t.Add(new Temperature("Temperature #5", 6));
 
-                            for (int i = 0; i < superIO.Fans.Length; i++)
-                                f.Add(new Fan("Fan #" + (i + 1), i));
+                            // CPU Fan Optional uses the same fancontrol as CPU Fan.
+                            // Water Pump speed can only be read from the EC.
+                            string[] fanNames = { "Chassis Fan 1", "CPU Fan", "Chassis Fan 2", "Chassis Fan 3", "Chassis Fan 4", "CPU Fan Optional" };
+                            string[] fanControlNames = { "Chassis Fan 1", "CPU Fan", "Chassis Fan 2", "Chassis Fan 3", "Chassis Fan 4", "Water Pump" };
 
-                            for (int i = 0; i < superIO.Controls.Length; i++)
-                                c.Add(new Ctrl("Fan Control #" + (i + 1), i));
+                            for (int i = 0; i < fanNames.Length; i++)
+                                f.Add(new Fan(fanNames[i], i));
+
+                            for (int i = 0; i < fanControlNames.Length; i++)
+                                c.Add(new Ctrl(fanControlNames[i] + " Control", i));
 
                             break;
                         }
