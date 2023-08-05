@@ -158,18 +158,18 @@ public class SensorNotifyIcon : IDisposable
         _smallFont.Dispose();
     }
 
-        private TrayIconType GetDefaultIconType(ISensor sensor)
+    private TrayIconType GetDefaultIconType(ISensor sensor)
+    {
+        switch (Sensor.SensorType)
         {
-            switch (Sensor.SensorType)
-            {
-                case SensorType.Load:
-                case SensorType.Control:
-                case SensorType.Level:
-                    return TrayIconType.Percent;
-                default:
-                    return TrayIconType.Transparent;
-            }
+            case SensorType.Load:
+            case SensorType.Control:
+            case SensorType.Level:
+                return TrayIconType.Percent;
+            default:
+                return TrayIconType.Transparent;
         }
+    }
 
     private string GetString()
     {

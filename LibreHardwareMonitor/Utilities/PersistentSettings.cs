@@ -226,26 +226,24 @@ public class PersistentSettings : ISettings
                 return Color.FromArgb(parsedValue);
         }
 
-            return value;
-        }
+        return value;
+    }
+    public void SetValue<TEnum>(string name, TEnum enumValue) where TEnum : struct
+    {
+        _settings[name] = enumValue.ToString();
+    }
 
-        public void SetValue<TEnum>(string name, TEnum enumValue) where TEnum : struct
+    public TEnum GetValue<TEnum>(string name, TEnum defaultValue) where TEnum : struct
+    {
+        if (_settings.TryGetValue(name, out string str))
         {
-            _settings[name] = enumValue.ToString();
-        }
-
-        public TEnum GetValue<TEnum>(string name, TEnum defaultValue) where TEnum : struct
-        {
-            if (_settings.TryGetValue(name, out string str))
+            TEnum enumValue;
+            if (Enum.TryParse(str, out enumValue))
             {
-                TEnum enumValue;
-                if (Enum.TryParse(str, out enumValue))
-                {
-                    return enumValue;
-                }
+                return enumValue;
             }
-
-            return defaultValue;
         }
+    
+        return defaultValue;
     }
 }
